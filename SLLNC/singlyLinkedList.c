@@ -36,6 +36,45 @@ void slist_init(list *list) {
 bool slist_isEmpty(list *list) { return (list->head == NULL); }
 
 /**
+ * @brief Menghapus data dari depan SLLNC
+ *
+ * @param Pointer ke list yang akan dihapus
+ */
+void slist_popFront(list *list) {
+  if (!slist_isEmpty(list)) {
+    node *temp = list->head;
+    list->head = list->head->next;
+    free(temp);
+    list->size--;
+  }
+}
+
+/**
+ * @brief Menghapus data dari belakang SLLNC
+ *
+ * @param Pointer ke list yang akan dihapus
+ */
+void slist_popBack(list *list) {
+  if (!slist_isEmpty(list)) {
+    node *temp = list->head;
+    node *prev = NULL;
+    while (temp->next != NULL) {
+      prev = temp;
+      temp = temp->next;
+    }
+    if (prev) {
+      prev->next = NULL;
+      list->tail = prev;
+    } else {
+      list->head = NULL;
+      list->tail = NULL;
+    }
+    free(temp);
+    list->size--;
+  }
+}
+
+/**
  * @brief Menambahkan data ke belakang dari SLLNC
  *
  * @param Pointer ke list yang akan diisi dan nilai yang akan dimasukkan
