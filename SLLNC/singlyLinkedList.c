@@ -94,7 +94,7 @@ void slist_pushBack(list *list, int value) {
     } else {
       node *temp = list->tail;
       temp->next = newNode;
-      list->tail = temp;
+      list->tail = newNode;
     }
   }
 }
