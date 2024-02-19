@@ -1,4 +1,3 @@
-#include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -44,20 +43,18 @@ bool dlist_isEmpty(DList *list) { return (list->head == NULL); }
  */
 void dlist_pushBack(DList *list, int value) {
   DListNode *newNode = (DListNode *)malloc(sizeof(DListNode));
-  // Dikasi if statement in case of memorynya ga cukup
   if (newNode) {
     list->size++;
     newNode->data = value;
     newNode->next = NULL;
-
     if (dlist_isEmpty(list)) {
-
       list->head = newNode;
       list->tail = newNode;
     } else {
       DListNode *temp = list->tail;
+      newNode->prev = temp;
       temp->next = newNode;
-      list->tail = temp;
+      list->tail = newNode;
     }
   }
 }
@@ -130,16 +127,8 @@ void dlist_insertAt(DList *list, int index, int value) {
   }
 
   DListNode *newNode = (DListNode *)malloc(sizeof(DListNode));
-
-  // Disini kita punya 2 objektif
-  // 1. Nextnya node barunya di assign ke temp->next habis looping
-  // 2. Ganti nextnya di index-1
   if (newNode) {
     DListNode *temp = list->head;
-
-    // Loopnya berakhir sampe nilai index-1 karena kita
-    // 0 1 _ 2 3 4 5
-    // temp sampe 1
     for (int i = 0; i < index - 1 && temp->next != NULL; i++) {
       temp = temp->next;
     }
@@ -154,11 +143,7 @@ void dlist_insertAt(DList *list, int index, int value) {
 
 int dlist_back(DList *list) {
   if (!dlist_isEmpty(list)) {
-    DListNode *temp = list->head;
-    while (temp->next == NULL) {
-      temp = temp->next;
-    }
-    return temp->data;
+    return list->tail->data;
   }
   return 0;
 }
