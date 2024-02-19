@@ -10,20 +10,20 @@ typedef struct dnode_t {
   int data;
   struct dnode_t *next;
   struct dnode_t *prev;
-} DListNode;
+} DLLNCNode;
 
 typedef struct dlist_t {
   unsigned size;
-  DListNode *head;
-  DListNode *tail;
-} DList;
+  DLLNCNode *head;
+  DLLNCNode *tail;
+} DLLNC;
 
 /**
  * @brief Inisialisasi DLLNC (Default : Size = 0, Head = NULL, Tail = NULL)
  *
  * @param Pointer ke DLLNC yang akan diinisialisasi
  */
-void dlist_init(DList *list) {
+void dlist_init(DLLNC *list) {
   list->size = 0;
   list->head = NULL;
   list->tail = NULL;
@@ -34,15 +34,15 @@ void dlist_init(DList *list) {
  *
  * @param Pointer ke DLLNC
  */
-bool dlist_isEmpty(DList *list) { return (list->head == NULL); }
+bool dlist_isEmpty(DLLNC *list) { return (list->head == NULL); }
 
 /**
- * @brief menambahkan data ke belakang dari dllnc
+ * @brief menambahkan node ke belakang dari dllnc
  *
  * @param pointer ke dllnc yang akan diisi dan nilai yang akan dimasukkan
  */
-void dlist_pushBack(DList *list, int value) {
-  DListNode *newNode = (DListNode *)malloc(sizeof(DListNode));
+void dlist_pushBack(DLLNC *list, int value) {
+  DLLNCNode *newNode = (DLLNCNode *)malloc(sizeof(DLLNCNode));
   if (newNode) {
     list->size++;
     newNode->data = value;
@@ -51,7 +51,7 @@ void dlist_pushBack(DList *list, int value) {
       list->head = newNode;
       list->tail = newNode;
     } else {
-      DListNode *temp = list->tail;
+      DLLNCNode *temp = list->tail;
       newNode->prev = temp;
       temp->next = newNode;
       list->tail = newNode;
@@ -60,12 +60,12 @@ void dlist_pushBack(DList *list, int value) {
 }
 
 /**
- * @brief menambahkan data ke depan dari DLLNC
+ * @brief menambahkan node ke depan dari DLLNC
  *
  * @param pointer ke DLLNC yang akan diisi dan nilai yang akan dimasukkan
  */
-void dlist_pushFront(DList *list, int value) {
-  DListNode *newNode = (DListNode *)malloc(sizeof(DListNode));
+void dlist_pushFront(DLLNC *list, int value) {
+  DLLNCNode *newNode = (DLLNCNode *)malloc(sizeof(DLLNCNode));
   if (newNode) {
     list->size++;
     newNode->data = value;
@@ -80,13 +80,13 @@ void dlist_pushFront(DList *list, int value) {
 }
 
 /**
- * @brief menghapus data dari depan DLLNC
+ * @brief menghapus node dari depan DLLNC
  *
  * @param pointer ke DLLNC yang akan dihapus data terdepannya
  */
-void dlist_popFront(DList *list) {
+void dlist_popFront(DLLNC *list) {
   if (!dlist_isEmpty(list)) {
-    DListNode *temp = list->head;
+    DLLNCNode *temp = list->head;
     list->head = list->head->next;
     list->head->prev = NULL;
     free(temp);
@@ -95,13 +95,13 @@ void dlist_popFront(DList *list) {
 }
 
 /**
- * @brief menghapus data dari belakang DLLNC
+ * @brief menghapus node dari belakang DLLNC
  *
  * @param pointer ke DLLNC yang akan dihapus data terbelakangnya
  */
-void dlist_popBack(DList *list) {
+void dlist_popBack(DLLNC *list) {
   if (!dlist_isEmpty(list)) {
-    DListNode *temp = list->tail;
+    DLLNCNode *temp = list->tail;
     list->tail = list->tail->prev;
     list->tail->next = NULL;
     free(temp);
@@ -110,12 +110,12 @@ void dlist_popBack(DList *list) {
 }
 
 /**
- * @brief menambahkan data ke indeks yang ditentukan dari DLLNC
+ * @brief menambahkan node ke indeks yang ditentukan dari DLLNC
  *
  * @param pointer ke DLLNC yang akan diisi, indeks yang akan disisipkan dan
  * nilai yang akan dimasukkan pada indeks tersebut
  */
-void dlist_insertAt(DList *list, int index, int value) {
+void dlist_insertAt(DLLNC *list, int index, int value) {
   if (dlist_isEmpty(list) || index >= list->size) {
     dlist_pushBack(list, value);
     return;
@@ -126,37 +126,48 @@ void dlist_insertAt(DList *list, int index, int value) {
     return;
   }
 
-  DListNode *newNode = (DListNode *)malloc(sizeof(DListNode));
+  DLLNCNode *newNode = (DLLNCNode *)malloc(sizeof(DLLNCNode));
   if (newNode) {
-    DListNode *temp = list->head;
+    DLLNCNode *temp = list->head;
     for (int i = 0; i < index - 1 && temp->next != NULL; i++) {
       temp = temp->next;
     }
     newNode->data = value;
     newNode->next = temp->next;
     newNode->prev = temp;
-    DListNode *temp1 = temp->next;
+    DLLNCNode *temp1 = temp->next;
     temp1->prev = newNode;
+    temp->next = newNode;
     list->size++;
   }
 }
 
-int dlist_back(DList *list) {
+/*
+ * @brief: Mengembalikan node paling depan linked list
+ *
+ * @param: DLLNC *list - linked list yang akan dipop dari belakang
+ * */
+int dlist_back(DLLNC *list) {
   if (!dlist_isEmpty(list)) {
     return list->tail->data;
   }
   return 0;
 }
 
-int dlist_front(DList *list) {
+/*
+ * @brief: Mengembalikan node paling depan linked list
+ *
+ * @param: DLLNC *list - linked list yang akan dipop dari belakang
+ * */
+int dlist_front(DLLNC *list) {
   if (!dlist_isEmpty(list))
     return list->head->data;
   return 0;
 }
 
-int dlist_getAt(DList *list, int index) {
+int dlist_getAt(DLLNC *list, int index) {
   if (!dlist_isEmpty(list)) {
-    DListNode *temp = list->head;
+    DLLNCNode *temp = list->head;
     for (int i = 0; i < index && temp->next != NULL; i++) {
       temp = temp->next;
     }
@@ -166,7 +177,7 @@ int dlist_getAt(DList *list, int index) {
 }
 
 int main() {
-  DList myLinkedList;
+  DLLNC myLinkedList;
   dlist_init(&myLinkedList);
   dlist_pushBack(&myLinkedList, 10);
   dlist_pushBack(&myLinkedList, 20);
