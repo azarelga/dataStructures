@@ -1,4 +1,3 @@
-#include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,42 +6,43 @@
 typedef long long int ll;
 typedef unsigned long long int ull;
 
-typedef struct snode_t {
+typedef struct snode {
   int data;
-  struct snode_t *next;
-} node;
+  struct snode *next;
+} Node;
 
-typedef struct slist_t {
+typedef struct slist {
   unsigned size;
-  node *head, *tail;
-} list;
+  Node *head, *tail;
+} LinkedList;
 
 /**
- * @brief Inisialisasi SLLNC (Default : Size = 0, Head = NULL, Tail = NULL)
+ * @brief Inisialisasi Linked List (Default : Size = 0, Head = NULL, Tail =
+ * NULL)
  *
  * @param Pointer ke list yang akan diinisialisasi
  */
-void slist_init(list *list) {
+void init(LinkedList *list) {
   list->size = 0;
   list->head = NULL;
   list->tail = NULL;
 }
 
 /**
- * @brief Mengembalikan true apabila SLLNC kosong
+ * @brief Mengembalikan true apabila Linked List kosong
  *
  * @param Pointer ke list
  */
-bool slist_isEmpty(list *list) { return (list->head == NULL); }
+bool isEmpty(LinkedList *list) { return (list->head == NULL); }
 
 /**
- * @brief Menghapus data dari depan SLLNC
+ * @brief Menghapus data dari depan Linked List
  *
  * @param Pointer ke list yang akan dihapus
  */
-void slist_popFront(list *list) {
-  if (!slist_isEmpty(list)) {
-    node *temp = list->head;
+void popFront(LinkedList *list) {
+  if (!isEmpty(list)) {
+    Node *temp = list->head;
     list->head = list->head->next;
     free(temp);
     list->size--;
@@ -50,14 +50,14 @@ void slist_popFront(list *list) {
 }
 
 /**
- * @brief Menghapus data dari belakang SLLNC
+ * @brief Menghapus data dari belakang Linked List
  *
  * @param Pointer ke list yang akan dihapus
  */
-void slist_popBack(list *list) {
-  if (!slist_isEmpty(list)) {
-    node *temp = list->head;
-    node *prev = NULL;
+void popBack(LinkedList *list) {
+  if (!isEmpty(list)) {
+    Node *temp = list->head;
+    Node *prev = NULL;
     while (temp->next != NULL) {
       prev = temp;
       temp = temp->next;
@@ -75,24 +75,24 @@ void slist_popBack(list *list) {
 }
 
 /**
- * @brief Menambahkan data ke belakang dari SLLNC
+ * @brief Menambahkan data ke belakang dari Linked List
  *
  * @param Pointer ke list yang akan diisi dan nilai yang akan dimasukkan
  */
-void slist_pushBack(list *list, int value) {
-  node *newNode = (node *)malloc(sizeof(node));
+void pushBack(LinkedList *list, int value) {
+  Node *newNode = (Node *)malloc(sizeof(Node));
   if (newNode) {
     list->size++;
     newNode->data = value;
     newNode->next = NULL;
 
     // Kalo Linked Listnya kosong
-    if (slist_isEmpty(list)) {
+    if (isEmpty(list)) {
       list->head = newNode;
       list->tail = newNode;
       // Kalo Linked Listnya sudah berisi
     } else {
-      node *temp = list->tail;
+      Node *temp = list->tail;
       temp->next = newNode;
       list->tail = newNode;
     }
@@ -100,16 +100,16 @@ void slist_pushBack(list *list, int value) {
 }
 
 /**
- * @brief Menambahkan data ke depan dari SLLNC
+ * @brief Menambahkan data ke depan dari Linked List
  *
  * @param Pointer ke list yang akan diisi dan nilai yang akan dimasukkan
  */
-void slist_pushFront(list *list, int value) {
-  node *newNode = (node *)malloc(sizeof(node));
+void pushFront(LinkedList *list, int value) {
+  Node *newNode = (Node *)malloc(sizeof(Node));
   if (newNode) {
     list->size++;
     newNode->data = value;
-    if (slist_isEmpty(list))
+    if (isEmpty(list))
       newNode->next = NULL;
     else {
       newNode->next = list->head;
@@ -119,29 +119,29 @@ void slist_pushFront(list *list, int value) {
 }
 
 /**
- * @brief Menambahkan data ke index yang ditentukan dari SLLNC
+ * @brief Menambahkan data ke index yang ditentukan dari Linked List
  *
  * @param Pointer ke list yang akan diisi, indeks yang ingin disisipkan data
  * baru dan nilai yang akan dimasukkan
  */
-void slist_insertAt(list *list, int index, int value) {
-  if (slist_isEmpty(list) || index >= list->size) {
-    slist_pushBack(list, value);
+void insertAt(LinkedList *list, int index, int value) {
+  if (isEmpty(list) || index >= list->size) {
+    pushBack(list, value);
     return;
   }
 
   else if (index == 0) {
-    slist_pushFront(list, value);
+    pushFront(list, value);
     return;
   }
 
-  node *newNode = (node *)malloc(sizeof(node));
+  Node *newNode = (Node *)malloc(sizeof(Node));
 
   // Disini kita punya 2 langkah
   // 1. Nextnya node barunya di assign ke temp->next habis looping
   // 2. Ganti nextnya di index-1
   if (newNode) {
-    node *temp = list->head;
+    Node *temp = list->head;
 
     for (int i = 0; i < index - 1 && temp->next != NULL; i++) {
       temp = temp->next;
@@ -154,36 +154,36 @@ void slist_insertAt(list *list, int index, int value) {
 }
 
 /**
- * @brief Mengembalikan nilai paling belakang dari SLLNC
+ * @brief Mengembalikan nilai paling belakang dari Linked List
  *
  * @param Pointer ke list
  */
-int slist_back(list *list) {
-  if (!slist_isEmpty(list)) {
+int tail(LinkedList *list) {
+  if (!isEmpty(list)) {
     return list->tail->data;
   }
   return 0;
 }
 
 /**
- * @brief Mengembalikan nilai paling depan dari SLLNC
+ * @brief Mengembalikan nilai paling depan dari Linked List
  *
  * @param Pointer ke list
  */
-int slist_front(list *list) {
-  if (!slist_isEmpty(list))
+int head(LinkedList *list) {
+  if (!isEmpty(list))
     return list->head->data;
   return 0;
 }
 
 /**
- * @brief Mengembalikan nilai pada indeks yang diinginkan dari SLLNC
+ * @brief Mengembalikan nilai pada indeks yang diinginkan dari Linked List
  *
  * @param Pointer ke list dan index yang diinginkan
  */
-int slist_getAt(list *list, int index) {
-  if (!slist_isEmpty(list)) {
-    node *temp = list->head;
+int getAt(LinkedList *list, int index) {
+  if (!isEmpty(list)) {
+    Node *temp = list->head;
     for (int i = 0; i < index && temp->next != NULL; i++) {
       temp = temp->next;
     }
@@ -193,11 +193,11 @@ int slist_getAt(list *list, int index) {
 }
 
 int main() {
-  list myLinkedList;
-  slist_init(&myLinkedList);
-  slist_pushBack(&myLinkedList, 10);
-  slist_pushBack(&myLinkedList, 20);
-  slist_pushBack(&myLinkedList, 30);
-  slist_pushBack(&myLinkedList, 40);
-  printf("%d\n", slist_getAt(&myLinkedList, 0));
+  LinkedList myLinkedList;
+  init(&myLinkedList);
+  pushBack(&myLinkedList, 10);
+  pushBack(&myLinkedList, 20);
+  pushBack(&myLinkedList, 30);
+  pushBack(&myLinkedList, 40);
+  printf("%d\n", getAt(&myLinkedList, 0));
 }

@@ -6,18 +6,16 @@ typedef long long int ll;
 typedef unsigned long long int ull;
 
 typedef struct node {
-    int data;
-    struct node* next;
-    struct node* prev;
+  int data;
+  struct node *next;
+  struct node *prev;
 } DLLCNode;
 
 typedef struct {
-    DLLCNode* head;
-    DLLCNode* tail;
-    int size;
+  DLLCNode *head;
+  DLLCNode *tail;
+  int size;
 } DLLC;
-
-//
 
 /*
  * @brief: Menginisialisasi linked list
@@ -76,7 +74,7 @@ void pushFront(DLLC *list, int data) {
     list->tail = newNode;
   }
   list->head = newNode;
-  list->head->prev = newNode;
+  list->head->prev = list->tail;
   list->tail->next = list->head;
   list->size++;
 }
@@ -185,5 +183,3 @@ int main() {
     printf("%d ", temp->data);
   }
 }
-
-
