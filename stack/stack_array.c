@@ -24,6 +24,20 @@ void init_stack(Stack *stack) { stack->size = -1; }
 int isEmpty(Stack *stack) { return stack->size == -1; }
 
 /*
+ * @brief Mengembalikan ukuran stack
+ *
+ * @param Stack *stack - stack
+ * */
+int size(Stack *stack) { return stack->size + 1; }
+
+/*
+ * @brief Mengembalikan nilai 1 apabila Stack penuh
+ *
+ * @param Stack *stack - stack yang akan dicek
+ * */
+int isFull(Stack *stack) { return size(stack) == MAX_STACK; }
+
+/*
  * @brief Mengembalikan data teratas dari Stack
  *
  * @param Stack *stack - stack
@@ -41,13 +55,6 @@ int top(Stack *stack) {
  * @param Stack *stack - stack
  * */
 void clear(Stack *stack) { stack->size = -1; }
-
-/*
- * @brief Mengembalikan ukuran stack
- *
- * @param Stack *stack - stack
- * */
-int size(Stack *stack) { return stack->size + 1; }
 
 /*
  * @brief Menghapus data terdepan dari Stack
