@@ -6,8 +6,13 @@
 typedef long long int ll;
 typedef unsigned long long int ull;
 
+typedef struct gerbong {
+  char namaGerbong[100];
+  int jumlahKursi;
+} Gerbong;
+
 typedef struct snode {
-  int data;
+  Gerbong data;
   struct snode *next;
 } Node;
 
@@ -79,7 +84,7 @@ void popBack(LinkedList *list) {
  *
  * @param Pointer ke list yang akan diisi dan nilai yang akan dimasukkan
  */
-void pushBack(LinkedList *list, int value) {
+void pushBack(LinkedList *list, Gerbong value) {
   Node *newNode = (Node *)malloc(sizeof(Node));
   if (newNode) {
     list->size++;
@@ -104,7 +109,7 @@ void pushBack(LinkedList *list, int value) {
  *
  * @param Pointer ke list yang akan diisi dan nilai yang akan dimasukkan
  */
-void pushFront(LinkedList *list, int value) {
+void pushFront(LinkedList *list, Gerbong value) {
   Node *newNode = (Node *)malloc(sizeof(Node));
   if (newNode) {
     list->size++;
@@ -151,7 +156,7 @@ void delete(LinkedList *list, int index) {
  * @param Pointer ke list yang akan diisi, indeks yang ingin disisipkan data
  * baru dan nilai yang akan dimasukkan
  */
-void insertAt(LinkedList *list, int index, int value) {
+void insertAt(LinkedList *list, int index, Gerbong value) {
   if (isEmpty(list) || index >= list->size) {
     pushBack(list, value);
     return;
@@ -185,11 +190,12 @@ void insertAt(LinkedList *list, int index, int value) {
  *
  * @param Pointer ke list
  */
-int tail(LinkedList *list) {
+Gerbong tail(LinkedList *list) {
   if (!isEmpty(list)) {
     return list->tail->data;
   }
-  return 0;
+  Gerbong empty;
+  return empty;
 }
 
 /**
@@ -197,10 +203,11 @@ int tail(LinkedList *list) {
  *
  * @param Pointer ke list
  */
-int head(LinkedList *list) {
+Gerbong head(LinkedList *list) {
   if (!isEmpty(list))
     return list->head->data;
-  return 0;
+  Gerbong empty;
+  return empty;
 }
 
 /**
@@ -208,7 +215,7 @@ int head(LinkedList *list) {
  *
  * @param Pointer ke list dan index yang diinginkan
  */
-int getAt(LinkedList *list, int index) {
+Gerbong getAt(LinkedList *list, int index) {
   if (!isEmpty(list)) {
     Node *temp = list->head;
     for (int i = 0; i < index && temp->next != NULL; i++) {
@@ -216,18 +223,36 @@ int getAt(LinkedList *list, int index) {
     }
     return temp->data;
   }
-  return 0;
+  Gerbong empty;
+  return empty;
 }
-
 int main() {
-  LinkedList myLinkedList;
-  init(&myLinkedList);
-  pushBack(&myLinkedList, 10);
-  pushBack(&myLinkedList, 20);
-  pushBack(&myLinkedList, 30);
-  pushBack(&myLinkedList, 40);
-  delete (&myLinkedList, 2);
-  printf("%d\n", getAt(&myLinkedList, 0));
-  printf("%d\n", getAt(&myLinkedList, 1));
-  printf("%d\n", getAt(&myLinkedList, 2));
+  LinkedList keretaApi;
+  init(&keretaApi);
+
+  Gerbong gerbong1 = {"Ekonomi - 1", 100};
+  Gerbong gerbong2 = {"Bisnis - 1", 50};
+  Gerbong gerbong3 = {"Eksekutif - 1", 20};
+  Gerbong gerbong4 = {"Eksekutif - 2", 20};
+
+  // Menambahkan gerbong ke keretaApi
+  pushBack(&keretaApi, gerbong1);
+  pushBack(&keretaApi, gerbong2);
+  pushBack(&keretaApi, gerbong3);
+  pushBack(&keretaApi, gerbong4);
+
+  // Menghapus gerbong pada indeks tertentu keretaApi
+  delete (&keretaApi, 2);
+
+  // Mencetak semua gerbong pada keretaApi
+  Node *temp = keretaApi.head;
+  while (temp != NULL) {
+    printf("Nama Gerbong: %s\n", temp->data.namaGerbong);
+    printf("Jumlah Kursi: %d\n", temp->data.jumlahKursi);
+    temp = temp->next;
+    printf("\n");
+  }
+
+  // Mencetak gerbong ke 3 pada keretaApi
+  printf("Gerbong ke-3\nNama Gerbong: %s\n", getAt(&keretaApi, 2).namaGerbong);
 }

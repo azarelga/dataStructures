@@ -112,6 +112,32 @@ void popBack(DoublyLinkedList *list) {
 }
 
 /**
+ * @brief Menambahkan data ke index yang ditentukan dari Linked List
+ *
+ * @param Pointer ke list yang akan diisi, indeks yang ingin disisipkan data
+ * baru dan nilai yang akan dimasukkan
+ */
+void delete(DoublyLinkedList *list, int index) {
+  if (isEmpty(list) || index >= list->size) {
+    popBack(list);
+    return;
+  }
+
+  else if (index == 0) {
+    popFront(list);
+    return;
+  }
+
+  Node *prevtemp = list->head;
+  while (index > 1) {
+    prevtemp = prevtemp->next;
+    index--;
+  }
+  Node *temp = prevtemp->next;
+  prevtemp->next = temp->next;
+  temp->next->prev = prevtemp;
+}
+/**
  * @brief menambahkan node ke indeks yang ditentukan dari DoublyLinkedList
  *
  * @param pointer ke DoublyLinkedList yang akan diisi, indeks yang akan
