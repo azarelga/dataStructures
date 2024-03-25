@@ -45,6 +45,12 @@ struct BST {
 
   int height() { return __bst__height(_root); }
 
+  void traverseInorder() { __inorder(_root); }
+
+  void traversePreorder() { __preorder(_root); }
+
+  void traversePostorder() { __postorder(_root); }
+
 private:
   BSTNode *__createNode(int value) {
     BSTNode *newNode = (BSTNode *)malloc(sizeof(BSTNode));
@@ -117,7 +123,6 @@ private:
     if (node == NULL)
       return 0;
     else {
-
       int lheight = __bst__height(node->left);
       int rheight = __bst__height(node->right);
 
@@ -125,6 +130,30 @@ private:
         return (lheight + 1);
       else
         return (rheight + 1);
+    }
+  }
+
+  void __inorder(BSTNode *root) {
+    if (root) {
+      __inorder(root->left);
+      printf("%d ", root->key);
+      __inorder(root->right);
+    }
+  }
+
+  void __postorder(BSTNode *root) {
+    if (root) {
+      __postorder(root->left);
+      __postorder(root->right);
+      printf("%d ", root->key);
+    }
+  }
+
+  void __preorder(BSTNode *root) {
+    if (root) {
+      printf("%d ", root->key);
+      __preorder(root->left);
+      __preorder(root->right);
     }
   }
 };
