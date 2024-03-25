@@ -1,5 +1,6 @@
-#include <stdio.h>
+#include <iostream>
 #include <stdlib.h>
+using namespace std;
 
 struct BSTNode {
   struct BSTNode *left, *right;
@@ -44,12 +45,6 @@ struct BST {
 
   int height() { return __bst__height(_root); }
 
-  void traverseInorder() { __inorder(_root); }
-
-  void traversePreorder() { __preorder(_root); }
-
-  void traversePostorder() { __postorder(_root); }
-
 private:
   BSTNode *__createNode(int value) {
     BSTNode *newNode = (BSTNode *)malloc(sizeof(BSTNode));
@@ -74,10 +69,11 @@ private:
     if (root == NULL)
       return __createNode(value);
 
-    if (value < root->key)
+    if (value < root->key) {
       root->left = __insert(root->left, value);
-    else if (value > root->key)
+    } else if (value > root->key) {
       root->right = __insert(root->right, value);
+    }
 
     return root;
   }
@@ -117,30 +113,6 @@ private:
     return root;
   }
 
-  void __inorder(BSTNode *root) {
-    if (root) {
-      __inorder(root->left);
-      printf("%d ", root->key);
-      __inorder(root->right);
-    }
-  }
-
-  void __postorder(BSTNode *root) {
-    if (root) {
-      __postorder(root->left);
-      __postorder(root->right);
-      printf("%d ", root->key);
-    }
-  }
-
-  void __preorder(BSTNode *root) {
-    if (root) {
-      printf("%d ", root->key);
-      __preorder(root->left);
-      __preorder(root->right);
-    }
-  }
-
   int __bst__height(BSTNode *node) {
     if (node == NULL)
       return 0;
@@ -169,13 +141,11 @@ int main(int argc, char const *argv[]) {
   set.insert(3);
   set.insert(7);
 
-  set.traverseInorder();
   puts("");
 
   set.remove(1);
   set.remove(6);
   set.remove(8);
-  set.traverseInorder();
   puts("");
   return 0;
 }
